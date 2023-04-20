@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -eou pipefail
+
+artifactId=${artifactId:-docker-java-fibonacci-demo}
+version=${version:-0.0.1-SNAPSHOT}
+
+cd "$(dirname "$0")"
+
+declare -A options=(
+  [docker_build]="--build-arg JAR_NAME=$artifactId \
+    --build-arg JAR_VERSION=$version -t $artifactId .
+  <- build a docker image named '$artifactId'"
+
+  [docker_run]="--rm $artifactId
+  <- run a docker container from image '$artifactId'"
+
+  [docker_rmi]="$artifactId
+  <- remove the generated docker image ($artifactId)"
+)
+
+fn=${@:-}
+[ "$fn" ] && option=${fn// /_} || option=none
+
+! [ "${options[$option]+_}" ] || {
+  $fn $(sed -n 1p <<< "${options[$option]}")
+  exit $?
+}
+
+echo You need to pass some arguments! Examples:
+for option in "${!options[@]}"
+do
+  printf "%-25s" "$0 ${option//_/ }"
+  echo '#' $(sed -n 2p <<< "${options[$option]}")
+done

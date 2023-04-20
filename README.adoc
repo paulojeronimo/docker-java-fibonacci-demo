@@ -1,0 +1,75 @@
+= Fibonacci with Java (+ Docker + Bash)
+:nofooter:
+:icons: font
+
+== Prerequisites
+
+. A Bash terminal.
+. Java, Maven and Docker installed.
+
+[NOTE]
+====
+Versions on my machine:
+
+----
+$ echo $BASH_VERSION
+5.1.16(1)-release
+
+$ java -version
+openjdk version "20.0.1" 2023-04-18
+OpenJDK Runtime Environment (build 20.0.1+9-29)
+OpenJDK 64-Bit Server VM (build 20.0.1+9-29, mixed mode, sharing)
+
+$ mvn -v
+Apache Maven 3.9.1 (2e178502fcdbffc201671fb2537d0cb4b4cc58f8)
+Maven home: /home/pj/.sdkman/candidates/maven/current
+Java version: 20.0.1, vendor: Oracle Corporation, runtime: /home/pj/.sdkman/candidates/java/20.0.1-open
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "5.19.0-38-generic", arch: "amd64", family: "unix"
+
+$ docker -v
+Docker version 23.0.4, build f480fb1
+----
+====
+
+== Execution
+
+. Know the script link:run[]:
++
+----
+$ ./run 
+You need to pass some arguments! Examples:
+./run docker rmi         # <- remove the generated docker image (docker-java-fibonacci-demo)
+./run docker build       # <- build a docker image named 'docker-java-fibonacci-demo'
+./run docker run         # <- run a docker container from image 'docker-java-fibonacci-demo'
+----
++
+. Build the jar
++
+----
+$ mvn package
+----
++ 
+. Build the Docker image:
++
+----
+$ ./run docker build
+----
++
+. Run the application (through Docker):
++
+----
+$ ./run docker run
+----
++
+. Do clean up actions:
+.. Remove the Docker image:
++
+----
+$ ./run docker rmi
+----
+.. Remove the generated files in the project:
++
+----
+$ mvn clean
+----
