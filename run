@@ -2,7 +2,7 @@
 set -eou pipefail
 
 artifactId=${artifactId:-docker-java-fibonacci-demo}
-version=${version:-0.0.1-SNAPSHOT}
+version=${version:-$(xmllint --xpath "/*[local-name()='project']/*[local-name()='version']/text()" pom.xml)}
 target=${target:-target}
 
 cd "$(dirname "$0")"
