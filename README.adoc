@@ -50,6 +50,18 @@ You need to pass some arguments! Examples:
 $ mvn package
 ----
 + 
+. Run the application:
+.. Through java:
++
+----
+$ java -jar target/docker-java-fibonacci-demo-0.0.1-SNAPSHOT.jar 10
+----
+.. Through maven:
++
+----
+$ mvn compile exec:java -Dexec.mainClass="com.paulojeronimo.Fibonacci" -Dexec.args="10"
+----
++
 . Build the Docker image:
 +
 ----
