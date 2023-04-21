@@ -9,13 +9,13 @@ cd "$(dirname "$0")"
 declare -A options=(
   [docker_build]="--build-arg JAR_NAME=$artifactId \
     --build-arg JAR_VERSION=$version -t $artifactId .
-  <- build a docker image named '$artifactId'"
+  build a docker image named '$artifactId'"
 
   [docker_run]="--rm $artifactId
-  <- run a docker container from image '$artifactId'"
+  run a docker container from image '$artifactId'"
 
   [docker_rmi]="$artifactId
-  <- remove the generated docker image ($artifactId)"
+  remove the generated docker image ($artifactId)"
 )
 
 fn=${@:-}
@@ -30,5 +30,5 @@ echo You need to pass some arguments! Examples:
 for option in "${!options[@]}"
 do
   printf "%-25s" "$0 ${option//_/ }"
-  echo '#' $(sed -n 2p <<< "${options[$option]}")
+  echo '# <- ' $(sed -n 2p <<< "${options[$option]}")
 done
