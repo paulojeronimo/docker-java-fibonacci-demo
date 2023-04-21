@@ -1,2 +1,7 @@
-/target
-/README.html
+target
+README.html
+
+# Eclipse generated (by lvim, in my case)
+.classpath
+.project
+.settings
