@@ -1,0 +1,10 @@
+FROM maven:3.9.1-amazoncorretto-20 AS MAVEN_BUILD
+WORKDIR /build
+COPY . /build
+RUN mvn clean package -DskipTests
+
+FROM openjdk:20-slim
+ARG JAR_NAME
+ARG JAR_VERSION
+COPY --from=MAVEN_BUILD /build/target/$JAR_NAME-$JAR_VERSION.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]

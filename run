@@ -3,6 +3,7 @@ set -eou pipefail
 
 artifactId=${artifactId:-docker-java-fibonacci-demo}
 version=${version:-0.0.1-SNAPSHOT}
+target=${target:-target}
 
 cd "$(dirname "$0")"
 
@@ -18,6 +19,17 @@ declare -A options=(
   remove the generated docker image ($artifactId)"
 )
 
+docker_build() {
+  local args=( "$@" )
+  local n=${#args[@]}
+  [ "${args[-1]}" = Dockerfile.maven ] &&
+    docker build -f Dockerfile.maven "${args[@]:0:n-1}" ||
+    {
+      [ -f $target/$artifactId-$version.jar ] || mvn package
+      docker build "${args[@]}"
+    }
+}
+
 f_arr=( "$@" )
 [ $# = 0 ] && option=none || { option="$@"; option=${option// /_}; }
 
@@ -26,9 +38,15 @@ do
   if [ "$option" ] && [[ $option =~ $key ]]
   then
     n=$(IFS=_ read -a arr <<< "$key"; echo ${#arr[@]})
-    cmd="${f_arr[@]:0:n} $(sed -n 1p <<< "${options[$key]}") "${f_arr[@]:n}""
-    echo $cmd
-    $cmd
+    cf_args=$(sed -n 1p <<< "${options[$key]}")
+    cmd="${f_arr[@]:0:n}"
+    if ! [ "$(type -t $key)" = function ]
+    then
+      echo $cmd $cf_args "${f_arr[@]:n}"
+      $cmd $cf_args "${f_arr[@]:n}"
+    else
+      $key $cf_args "${f_arr[@]:n}"
+    fi
     exit $?
   fi
 done

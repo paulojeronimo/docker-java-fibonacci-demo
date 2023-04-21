@@ -1,11 +1,17 @@
 = Fibonacci with Java (+ Docker + Bash)
-:nofooter:
 :icons: font
+:idprefix:
+:idseparator: -
+:nofooter:
+:numbered:
+:sectanchors:
+:toc: left
 
 == Prerequisites
 
 . A Bash terminal.
-. Java, Maven and Docker installed.
+. Java and Maven installed (if you are running a development environment).
+. Docker installed.
 
 [NOTE]
 ====
@@ -32,7 +38,7 @@ Docker version 23.0.4, build f480fb1
 ----
 ====
 
-== Execution
+== Build and execution (on a development environment)
 
 . Know the script link:run[]:
 +
@@ -68,7 +74,9 @@ $ mvn compile exec:java -Dexec.mainClass="com.paulojeronimo.Fibonacci" -Dexec.ar
 $ ./run docker build
 ----
 +
-. Run the application (through Docker):
+NOTE: this command with call `mvn package` automactically.
++
+. [[docker-run]] Run the application (through Docker):
 +
 ----
 $ ./run docker run 10
@@ -85,3 +93,12 @@ $ ./run docker rmi
 ----
 $ mvn clean
 ----
+
+== Build and execution (using Docker only)
+
+. Build the Docker image:
++
+----
+$ ./run docker build Dockerfile.maven
+----
+. <<docker-run,Run the application (through Docker)>>.
