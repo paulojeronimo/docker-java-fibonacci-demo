@@ -71,7 +71,7 @@ $ ./run docker build
 . Run the application (through Docker):
 +
 ----
-$ ./run docker run
+$ ./run docker run 10
 ----
 +
 . Do clean up actions:

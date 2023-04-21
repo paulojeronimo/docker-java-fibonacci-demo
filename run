@@ -18,13 +18,20 @@ declare -A options=(
   remove the generated docker image ($artifactId)"
 )
 
-fn=${@:-}
-[ "$fn" ] && option=${fn// /_} || option=none
+f_arr=( "$@" )
+[ $# = 0 ] && option=none || { option="$@"; option=${option// /_}; }
 
-! [ "${options[$option]+_}" ] || {
-  $fn $(sed -n 1p <<< "${options[$option]}")
-  exit $?
-}
+for key in ${!options[@]}
+do
+  if [ "$option" ] && [[ $option =~ $key ]]
+  then
+    n=$(IFS=_ read -a arr <<< "$key"; echo ${#arr[@]})
+    cmd="${f_arr[@]:0:n} $(sed -n 1p <<< "${options[$key]}") "${f_arr[@]:n}""
+    echo $cmd
+    $cmd
+    exit $?
+  fi
+done
 
 echo You need to pass some arguments! Examples:
 for option in "${!options[@]}"
